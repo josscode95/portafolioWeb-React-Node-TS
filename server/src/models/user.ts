@@ -14,6 +14,15 @@ const UserSchema = new Schema({
     required: [ true, 'el password es obligatorio' ],
     unique: true
   }
+}, {
+  toJSON: {
+    transform: function(doc, ret){
+      delete ret.__v
+      ret.uid = ret._id      
+      delete ret._id
+      delete ret.password
+    }
+  }
 })
 
 export default model('User', UserSchema);
