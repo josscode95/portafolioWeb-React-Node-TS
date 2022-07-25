@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { check } from "express-validator";
-import { validityFields } from "../middlewares";
+import { validityFields, validityJWT } from "../middlewares";
 import { getProjects, getOneProject, createProject } from '../controllers/projectsController';
 import { existProject } from '../helpers/db-validators';
 
@@ -24,7 +24,11 @@ router.get(
 router.post(
   '/',
   [
-
+    validityJWT,
+    check('title', 'The title is required').not().isEmpty(),
+    check('description', 'The description is required').not().isEmpty(),
+    check('skills', 'What are your skills').isArray({min:1, max:5}),
+    validityFields
   ],
   createProject
 )
