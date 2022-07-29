@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { check } from "express-validator";
 import { validityFields, validityJWT } from "../middlewares";
-import { getProjects, getOneProject, createProject } from '../controllers/projectsController';
+import { getProjects, getOneProject, createProject, updateProject } from '../controllers/projectsController';
 import { existProject } from '../helpers/db-validators';
 
 const router = Router();
@@ -31,6 +31,19 @@ router.post(
     validityFields
   ],
   createProject
+)
+
+//we create path to update one project
+router.put(
+  '/:id',
+  [
+    validityJWT,
+    check('title', 'The title is required').not().isEmpty(),
+    check('description', 'The description is required').not().isEmpty(),
+    check('skills', 'What are your skills').isArray({min:1}),
+    validityFields
+  ],
+  updateProject
 )
 
 module.exports = router;

@@ -27,3 +27,10 @@ export const createProject = async(req:Request, res:Response) => {
   await project.save()
   res.status(201).json( project )
 }
+
+export const updateProject = async(req:Request, res:Response) => {
+  const { id } = req.params;
+  const { ...body } = req.body;
+  const projectUpdate = await Project.findByIdAndUpdate(id, body, { new: true })
+  res.json(projectUpdate)
+}

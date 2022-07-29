@@ -10,9 +10,20 @@ const MessageSchema = new Schema({
     required: true
   },
   business: {
+    type: String
+  },
+  email: {
     type: String,
-    required: [ true, 'el correo es obligatorio' ],
+    required: true,
     unique: true
+  }
+}, {
+  toJSON: {
+    transform: function(doc, ret){
+      delete ret.__v
+      ret.id = ret._id
+      delete ret._id
+    }
   }
 })
 
