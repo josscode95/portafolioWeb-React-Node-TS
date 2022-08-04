@@ -10,3 +10,9 @@ export const existProject = async( id:string ) => {
     throw new Error(`Must be a mongoDB ID`);
   }
 }
+
+export const containersAllowed = (container:string = '', containers:string[] = []) => {
+  const incluided = containers.includes(container)
+  if(!incluided) throw new Error(`The container ${ container }, is not allowed, ${ containers }`)
+  return true;
+}

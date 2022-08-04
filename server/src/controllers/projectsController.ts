@@ -24,6 +24,7 @@ export const createProject = async(req:Request, res:Response) => {
   })
   const data = { ...body }
   const project = new Project( data )
+  //aqui subir la imagen - project.pictures
   await project.save()
   res.status(201).json( project )
 }
