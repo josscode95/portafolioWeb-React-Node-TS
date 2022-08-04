@@ -1,9 +1,12 @@
-import { v4 as uuidv4 } from "uuid";
-import path from 'path';
+import keys from "../keys";
 
-export const uploadFile = (reqFiles:any, validExtensions = ['png', 'jpg', 'jpeg', 'gif'], container = '') => {
+import cloudinary from "cloudinary";
+const cloudImg = cloudinary.v2;
+cloudImg.config(keys.CLOUD_IMG)
 
-  return new Promise((resolve, reject) => {
+export const uploadFile = (reqFiles:any, validExtensions = ['png', 'jpg', 'jpeg', 'gif']) => {
+
+  return new Promise(async(resolve, reject) => {
     const { archivo } = reqFiles;
     const files:any = Object.values(archivo)
     const arrayFiles:any = [];
@@ -12,16 +15,14 @@ export const uploadFile = (reqFiles:any, validExtensions = ['png', 'jpg', 'jpeg'
       const extension = nameCut[ nameCut.length - 1 ];
       //validar extension
       if(!validExtensions.includes(extension)) return reject(`The extension ${extension}, doesn't exist in ${validExtensions}`);
-      const nameTemp = uuidv4() + '.' + extension;
-      const uploadPath = path.join(__dirname, '../../src/uploads/', container, nameTemp);
-      arrayFiles.push(nameTemp + '')  
-      files[i].mv(uploadPath, (err:any) => {
-        if( err ){
-          return reject( err )
-        }
-        resolve( arrayFiles )
-      })
+      const { secure_url } = await cloudImg.uploader.upload(files[i].tempFilePath);
+      arrayFiles.push(secure_url)
     } 
+    if( arrayFiles.length === 0 ){
+      reject('Hubo un problema no se cargo las imagenes')
+    }else{
+      resolve( arrayFiles )
+    }
   })
 
 }

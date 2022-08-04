@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 
 import Project from '../models/project';
+import { uploadFile } from '../helpers/upload-file';
 
 export const getProjects = async(req:Request, res:Response) => {
   const [ total, projects ] = await Promise.all([
@@ -24,7 +25,8 @@ export const createProject = async(req:Request, res:Response) => {
   })
   const data = { ...body }
   const project = new Project( data )
-  //aqui subir la imagen - project.pictures
+  const pathPictures = await uploadFile(req.files, undefined)
+  project.pictures = pathPictures;
   await project.save()
   res.status(201).json( project )
 }

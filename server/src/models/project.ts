@@ -23,8 +23,7 @@ const ProjectSchema = new Schema({
     default: []
   },
   skills: {
-    type: [ String ],
-    required: true
+    type: [ String ]
   },
 }, {
   toJSON: {

@@ -3,6 +3,7 @@ import { check } from "express-validator";
 import { validityFields, validityJWT } from "../middlewares";
 import { getProjects, getOneProject, createProject, updateProject } from '../controllers/projectsController';
 import { existProject } from '../helpers/db-validators';
+import { validateFile } from '../middlewares/validity-file';
 
 const router = Router();
 
@@ -25,9 +26,9 @@ router.post(
   '/',
   [
     validityJWT,
+    validateFile,
     check('title', 'The title is required').not().isEmpty(),
     check('description', 'The description is required').not().isEmpty(),
-    check('skills', 'What are your skills').isArray({min:1, max:5}),
     validityFields
   ],
   createProject
